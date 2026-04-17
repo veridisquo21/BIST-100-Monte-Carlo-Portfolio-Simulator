@@ -40,7 +40,7 @@ for t in range(1, N+1):
     Z_corr = np.dot(L,Z_ind)
 
     for i in range(len(tickers)):
-        S[t,i,:] = S[t-1,i,:] * np.exp((mu[i]-0.5*sigma[i]**2)*dt+sigma[i]*np.sqrt(dt)*Z_corr[i,:])
+        S[t,i,:] = S[t-1,i,:] * np.exp((mu.iloc[i]-0.5*sigma.iloc[i]**2)*dt+sigma[i]*np.sqrt(dt)*Z_corr[i,:])
 
 starting_money = 300000
 inv_per_stock = starting_money / len(tickers)
@@ -84,3 +84,21 @@ probability_profit_percent50 = (portfolio_end_value > starting_money * 1.5).sum(
 print(f"\nPORTFOLIO RISK ANALYSIS ({M} Senaryo):")
 print(f"The possibility of losing the principal (300,000 TL): %{probability_loss:.2f}")
 print(f"Possibility of Portfolio Growth of 50% (Above 450,000 TL): %{probability_profit_percent50:.2f}")
+
+# --- REPORT METRICS ---
+print("\n--- REPORT METRICS ---")
+print(f"Initial Prices (S0): THYAO={S_initial[0]:.2f}, BIMAS={S_initial[1]:.2f}, TUPRS={S_initial[2]:.2f}")
+print(f"Annual Return (mu)  : THYAO={mu[0]*100:.1f}%, BIMAS={mu[1]*100:.1f}%, TUPRS={mu[2]*100:.1f}%")
+print(f"Annual Volatility   : THYAO={sigma[0]*100:.1f}%, BIMAS={sigma[1]*100:.1f}%, TUPRS={sigma[2]*100:.1f}%")
+
+var_95 = np.percentile(portfolio_end_value, 5)
+var_99 = np.percentile(portfolio_end_value, 1)
+portfolio_vol = portfolio_end_value.std() / starting_money * 100
+avg_individual_vol = float(sigma.mean()) * 100
+
+print(f"\nMedian Portfolio Value      : {medyan_portfoy:,.0f} TL")
+print(f"95% VaR (lower bound)       : {var_95:,.0f} TL  → max loss: {starting_money - var_95:,.0f} TL")
+print(f"99% VaR (lower bound)       : {var_99:,.0f} TL")
+print(f"Portfolio Volatility        : {portfolio_vol:.1f}%")
+print(f"Avg. Individual Volatility  : {avg_individual_vol:.1f}%")
+print(f"Diversification Benefit     : {avg_individual_vol - portfolio_vol:.1f}% reduction in volatility")

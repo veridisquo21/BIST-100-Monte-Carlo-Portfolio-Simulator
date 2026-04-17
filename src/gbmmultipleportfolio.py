@@ -27,7 +27,7 @@ print("-" * 40)
 S_initial = data.iloc[-1].to_numpy()
 T=1
 N=252
-M=50000
+M=1000000
 dt = T/N
 
 S=np.zeros((N+1,len(tickers),M))
@@ -56,21 +56,21 @@ fig, ax = plt.subplots(1,2, figsize=(16,6))
 ax[0].plot((S[:, 0, 10] / S_initial[0] - 1)*100, label='THYAO', color='red')
 ax[0].plot((S[:, 1, 10] / S_initial[1] - 1)*100, label='BIMAS', color='green')
 ax[0].plot((S[:, 2, 10] / S_initial[2] - 1)*100, label='TUPRS', color='blue')
-ax[0].set_title("Örnek Bir Senaryoda 3 Hissenin Getiri (%) Eğrileri")
-ax[0].set_xlabel("Gün")
-ax[0].set_ylabel("Getiri (%)")
+ax[0].set_title("Return (%) Curves of 3 Stocks in an Example Scenario")
+ax[0].set_xlabel("Day")
+ax[0].set_ylabel("Return (%)")
 ax[0].legend()
 ax[0].grid(True)
 
 # Sağ Grafik: Portföyün Toplam Değer Dağılımı (Diversification Effect)
 ax[1].hist(portfolio_end_value, bins=100, color='gold', edgecolor='black', alpha=0.7)
-ax[1].set_title("300.000 TL'lik Portföyün 1 Yıl Sonraki Olası Değeri")
-ax[1].set_xlabel("Toplam Portföy Büyüklüğü (TRY)")
-ax[1].set_ylabel("Frekans")
+ax[1].set_title("The potential value of a 300,000 TL portfolio after 1 year")
+ax[1].set_xlabel("Total Portfolio Size (TRY)")
+ax[1].set_ylabel("Frequency")
 
 medyan_portfoy = np.median(portfolio_end_value)
-ax[1].axvline(starting_money, color='red', linestyle='--', linewidth=2, label=f'Ana Para: {starting_money:,} TL')
-ax[1].axvline(medyan_portfoy, color='green', linestyle='-', linewidth=2, label=f'Medyan: {medyan_portfoy:,.0f} TL')
+ax[1].axvline(starting_money, color='red', linestyle='--', linewidth=2, label=f'Capital: {starting_money:,} TL')
+ax[1].axvline(medyan_portfoy, color='green', linestyle='-', linewidth=2, label=f'Median: {medyan_portfoy:,.0f} TL')
 ax[1].legend()
 ax[1].grid(True, alpha=0.3)
 
@@ -78,9 +78,9 @@ plt.tight_layout()
 plt.show()
 
 # ANALİZ ÇIKTILARI
-olasilik_zarar = (portfolio_end_value < starting_money).sum() / M * 100
-olasilik_kar_yuzde50 = (portfolio_end_value > starting_money * 1.5).sum() / M * 100
+probability_loss = (portfolio_end_value < starting_money).sum() / M * 100
+probability_profit_percent50 = (portfolio_end_value > starting_money * 1.5).sum() / M * 100
 
-print(f"\nPORTFÖY RİSK ANALİZİ ({M} Senaryo):")
-print(f"Ana Parayı (300.000 TL) Kaybetme İhtimali: %{olasilik_zarar:.2f}")
-print(f"Portföyü %50 Büyütme (450.000 TL Üstü) İhtimali: %{olasilik_kar_yuzde50:.2f}")
+print(f"\nPORTFOLIO RISK ANALYSIS ({M} Senaryo):")
+print(f"The possibility of losing the principal (300,000 TL): %{probability_loss:.2f}")
+print(f"Possibility of Portfolio Growth of 50% (Above 450,000 TL): %{probability_profit_percent50:.2f}")

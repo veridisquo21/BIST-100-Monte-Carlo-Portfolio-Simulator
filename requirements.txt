@@ -1,0 +1,15 @@
+Hello! You need these libraries to use and access this repo:
+-yfinance
+-matplotlib
+-numpy
+-pandas
+-datetime
+
+------------------------------------------------------------------
+
+Merhaba! Bu repoyu kullanmak ve repoya erişmek için bu kütüphanelere ihtiyacınız var:
+-yfinance
+-matplotlib
+-numpy
+-pandas
+-datetime
